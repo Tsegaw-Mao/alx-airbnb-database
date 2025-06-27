@@ -19,7 +19,7 @@
   - All non-key attributes depend only on the primary key.
 
 ## Notes
-- The 'Enums' (`role`, `booking_status`, `payment_method`) are used for fixed sets of values and do not violate normalization since the sets are not expected to grow.
+- The `Enums` (`role`, `booking_status`, `payment_method`) are used for fixed sets of values and do not violate normalization since the sets are not expected to grow.
 - No redundant data or transitive dependencies were found in the schema.
 
 ## Conclusion
