@@ -23,4 +23,4 @@
 - No redundant data or transitive dependencies were found in the schema.
 
 ## Conclusion
-The current schema is in **Third Normal Form (3NF)** and is well-structured for the intended
+The current schema is in **Third Normal Form (3NF)** and is well-structured for the intended Purpose
