@@ -1,3 +1,6 @@
+# You can find the visual reperesentation of the ER diagram at :
+ https://dbdiagram.io/d/relationships-685eeff7f413ba35083f7ac1
+
 Enum role {
   guest
   host
