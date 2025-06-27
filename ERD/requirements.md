@@ -16,7 +16,7 @@ Enum payment_method {
   stripe
 }
 
-Table users {
+Table Users {
   user_id        uuid    [pk, unique, note: 'Primary Key, Indexed']
   first_name     varchar [not null]
   last_name      varchar [not null]
@@ -26,12 +26,11 @@ Table users {
   role           role    [not null]
   created_at     timestamp [default: `CURRENT_TIMESTAMP`]
 
-  Note: 'User table with roles and unique emails'
 }
 
-Table properties {
+Table Properties {
   property_id     uuid    [pk, unique, note: 'Primary Key, Indexed']
-  host_id         uuid    [ref: > users.user_id, not null]
+  host_id         uuid    [ref: > Users.user_id, not null]
   name            varchar [not null]
   description     text    [not null]
   location        varchar [not null]
@@ -39,49 +38,44 @@ Table properties {
   created_at      timestamp [default: `CURRENT_TIMESTAMP`]
   updated_at      timestamp [note: 'ON UPDATE CURRENT_TIMESTAMP']
 
-  Note: 'Properties listed by hosts'
 }
 
-Table bookings {
+Table Bookings {
   booking_id   uuid    [pk, unique, note: 'Primary Key, Indexed']
-  property_id  uuid    [ref: > properties.property_id, not null, note: 'Indexed']
-  user_id      uuid    [ref: > users.user_id, not null]
+  property_id  uuid    [ref: > Properties.property_id, not null, note: 'Indexed']
+  user_id      uuid    [ref: > Users.user_id, not null]
   start_date   date    [not null]
   end_date     date    [not null]
   total_price  decimal [not null]
   status       booking_status [not null]
   created_at   timestamp [default: `CURRENT_TIMESTAMP`]
 
-  Note: 'Tracks booking details and status'
 }
 
-Table payments {
+Table Payments {
   payment_id     uuid    [pk, unique, note: 'Primary Key, Indexed']
-  booking_id     uuid    [ref: > bookings.booking_id, not null, note: 'Indexed']
+  booking_id     uuid    [ref: > Bookings.booking_id, not null, note: 'Indexed']
   amount         decimal [not null]
   payment_date   timestamp [default: `CURRENT_TIMESTAMP`]
   payment_method payment_method [not null]
 
-  Note: 'Payments linked to bookings'
 }
 
-Table reviews {
+Table Reviews {
   review_id   uuid    [pk, unique, note: 'Primary Key, Indexed']
-  property_id uuid    [ref: > properties.property_id, not null]
-  user_id     uuid    [ref: > users.user_id, not null]
+  property_id uuid    [ref: > Properties.property_id, not null]
+  user_id     uuid    [ref: > Users.user_id, not null]
   rating      integer [not null, note: 'Value must be between 1 and 5']
   comment     text    [not null]
   created_at  timestamp [default: `CURRENT_TIMESTAMP`]
 
-  Note: 'User reviews for properties'
 }
 
-Table messages {
+Table Messages {
   message_id     uuid    [pk, unique, note: 'Primary Key, Indexed']
-  sender_id      uuid    [ref: > users.user_id, not null]
-  recipient_id   uuid    [ref: > users.user_id, not null]
+  sender_id      uuid    [ref: > Users.user_id, not null]
+  recipient_id   uuid    [ref: > Users.user_id, not null]
   message_body   text    [not null]
   sent_at        timestamp [default: `CURRENT_TIMESTAMP`]
 
-  Note: 'Direct messages between users'
-}
+ }
