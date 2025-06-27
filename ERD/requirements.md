@@ -1,83 +1,129 @@
 #### You can find the visual reperesentation of the ER diagram at : https://dbdiagram.io/d/relationships-685eeff7f413ba35083f7ac1
 
-Enum role {
-  guest
-  host
-  admin
-}
+# Database Entities and Relationships
 
-Enum booking_status {
-  pending
-  confirmed
-  canceled
-}
+This document defines the entities, their attributes, and the relationships in the System.
 
-Enum payment_method {
-  credit_card
-  paypal
-  stripe
-}
+---
 
-Table Users {
-  user_id        uuid    [pk, unique, note: 'Primary Key, Indexed']
-  first_name     varchar [not null]
-  last_name      varchar [not null]
-  email          varchar [not null, unique, note: 'Indexed']
-  password_hash  varchar [not null]
-  phone_number   varchar
-  role           role    [not null]
-  created_at     timestamp [default: `CURRENT_TIMESTAMP`]
+## Entity: User
 
-}
+Represents all users of the platform including guests, hosts, and admins.
 
-Table Properties {
-  property_id     uuid    [pk, unique, note: 'Primary Key, Indexed']
-  host_id         uuid    [ref: > Users.user_id, not null]
-  name            varchar [not null]
-  description     text    [not null]
-  location        varchar [not null]
-  pricepernight   decimal [not null]
-  created_at      timestamp [default: `CURRENT_TIMESTAMP`]
-  updated_at      timestamp [note: 'ON UPDATE CURRENT_TIMESTAMP']
+### Attributes
+- `user_id` (UUID, Primary Key)
+- `first_name` (VARCHAR, NOT NULL)
+- `last_name` (VARCHAR, NOT NULL)
+- `email` (VARCHAR, UNIQUE, NOT NULL)
+- `password_hash` (VARCHAR, NOT NULL)
+- `phone_number` (VARCHAR, NULL)
+- `role` (ENUM: guest, host, admin, NOT NULL)
+- `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 
-}
+---
 
-Table Bookings {
-  booking_id   uuid    [pk, unique, note: 'Primary Key, Indexed']
-  property_id  uuid    [ref: > Properties.property_id, not null, note: 'Indexed']
-  user_id      uuid    [ref: > Users.user_id, not null]
-  start_date   date    [not null]
-  end_date     date    [not null]
-  total_price  decimal [not null]
-  status       booking_status [not null]
-  created_at   timestamp [default: `CURRENT_TIMESTAMP`]
+## Entity: Property
 
-}
+Represents properties listed by hosts.
 
-Table Payments {
-  payment_id     uuid    [pk, unique, note: 'Primary Key, Indexed']
-  booking_id     uuid    [ref: > Bookings.booking_id, not null, note: 'Indexed']
-  amount         decimal [not null]
-  payment_date   timestamp [default: `CURRENT_TIMESTAMP`]
-  payment_method payment_method [not null]
+### Attributes
+- `property_id` (UUID, Primary Key)
+- `host_id` (UUID, Foreign Key → User.user_id)
+- `name` (VARCHAR, NOT NULL)
+- `description` (TEXT, NOT NULL)
+- `location` (VARCHAR, NOT NULL)
+- `pricepernight` (DECIMAL, NOT NULL)
+- `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP)
 
-}
+---
 
-Table Reviews {
-  review_id   uuid    [pk, unique, note: 'Primary Key, Indexed']
-  property_id uuid    [ref: > Properties.property_id, not null]
-  user_id     uuid    [ref: > Users.user_id, not null]
-  rating      integer [not null, note: 'Value must be between 1 and 5']
-  comment     text    [not null]
-  created_at  timestamp [default: `CURRENT_TIMESTAMP`]
+## Entity: Booking
 
-}
+Represents a booking made by a user for a property.
 
-Table Messages {
-  message_id     uuid    [pk, unique, note: 'Primary Key, Indexed']
-  sender_id      uuid    [ref: > Users.user_id, not null]
-  recipient_id   uuid    [ref: > Users.user_id, not null]
-  message_body   text    [not null]
-  sent_at        timestamp [default: `CURRENT_TIMESTAMP`]
+### Attributes
+- `booking_id` (UUID, Primary Key)
+- `property_id` (UUID, Foreign Key → Property.property_id)
+- `user_id` (UUID, Foreign Key → User.user_id)
+- `start_date` (DATE, NOT NULL)
+- `end_date` (DATE, NOT NULL)
+- `total_price` (DECIMAL, NOT NULL)
+- `status` (ENUM: pending, confirmed, canceled, NOT NULL)
+- `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 
- }
+---
+
+## Entity: Payment
+
+Represents payment information linked to a booking.
+
+### Attributes
+- `payment_id` (UUID, Primary Key)
+- `booking_id` (UUID, Foreign Key → Booking.booking_id)
+- `amount` (DECIMAL, NOT NULL)
+- `payment_date` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+- `payment_method` (ENUM: credit_card, paypal, stripe, NOT NULL)
+
+---
+
+## Entity: Review
+
+Represents user reviews for a property.
+
+### Attributes
+- `review_id` (UUID, Primary Key)
+- `property_id` (UUID, Foreign Key → Property.property_id)
+- `user_id` (UUID, Foreign Key → User.user_id)
+- `rating` (INTEGER, CHECK: 1 ≤ rating ≤ 5, NOT NULL)
+- `comment` (TEXT, NOT NULL)
+- `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+---
+
+## Entity: Message
+
+Represents direct messages between users.
+
+### Attributes
+- `message_id` (UUID, Primary Key)
+- `sender_id` (UUID, Foreign Key → User.user_id)
+- `recipient_id` (UUID, Foreign Key → User.user_id)
+- `message_body` (TEXT, NOT NULL)
+- `sent_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+---
+
+# Entity Relationships
+
+### User ↔ Booking
+- One user **can make many** bookings.
+- One booking is **made by one** user.
+- **Type**: One-to-Many (`User.user_id` → `Booking.user_id`)
+
+### User (host) ↔ Property
+- One host **can list many** properties.
+- One property **belongs to one** host.
+- **Type**: One-to-Many (`User.user_id` → `Property.host_id`)
+
+### Property ↔ Booking
+- One property **can be booked many times**.
+- One booking is **for one property**.
+- **Type**: One-to-Many (`Property.property_id` → `Booking.property_id`)
+
+### Booking ↔ Payment
+- One booking **can have one or more** payments (though usually one).
+- Each payment is **linked to one** booking.
+- **Type**: One-to-One or One-to-Many (`Booking.booking_id` → `Payment.booking_id`)
+
+### User ↔ Review ↔ Property
+- A user **can write many** reviews.
+- A property **can have many** reviews.
+- Each review **belongs to one user** and **one property**.
+- **Type**: Many-to-Many (resolved through the `Review` table)
+
+### User ↔ Message ↔ User
+- Users **can send and receive messages** to/from other users.
+- **Type**: Many-to-Many (self-join via `Message` table)
+
+
