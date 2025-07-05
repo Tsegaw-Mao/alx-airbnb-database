@@ -22,13 +22,13 @@ SELECT
     Properties.location,
     Properties.pricepernight,
     Reviews.review_id,
-    Reviews.property_id
-    Reviews.comment, AS property_review,
+    Reviews.user_id AS reviewer_id,
+    Reviews.comment AS property_review,
     Reviews.rating AS property_rating
 FROM
     Properties
 LEFT JOIN
-    Reviews ON Properties.property_id = Reviews.property_id
+    Reviews ON Properties.property_id = Reviews.property_id;
 
 SELECT
     Users.user_id,
