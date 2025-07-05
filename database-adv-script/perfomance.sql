@@ -47,3 +47,5 @@ FROM
 JOIN Users u ON b.user_id = u.user_id
 JOIN Properties p ON b.property_id = p.property_id
 JOIN Payments pay ON b.booking_id = pay.booking_id;
+WHERE
+    p.location = 'Addis Ababa' AND p.pricepernight < 200.00
