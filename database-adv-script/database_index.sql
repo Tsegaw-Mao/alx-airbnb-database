@@ -11,3 +11,18 @@ CREATE INDEX idx_bookings_created_at ON Bookings(created_at);
 -- Indexes for Properties
 CREATE INDEX idx_properties_property_id ON Properties(property_id);
 CREATE INDEX idx_properties_location ON Properties(location);
+
+-- create Performace measurement indexes
+EXPLAIN ANALYZE
+SELECT
+  Users.name,
+  Properties.name,
+  Bookings.created_at
+FROM
+  Bookings
+JOIN Users ON Users.user_id = Bookings.user_id
+JOIN Properties ON Properties.property_id = Bookings.property_id
+WHERE
+  Properties.location = 'Addis Ababa'
+ORDER BY
+  Bookings.created_at DESC;
