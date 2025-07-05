@@ -17,11 +17,14 @@ INNER JOIN
 
 SELECT
     Properties.property_id,
+    Properties.host_id,
+    Properties.user_id,
     Properties.name,
     Properties.description,
     Properties.location,
     Properties.pricepernight,
-    Reviews.comment AS property_review,
+    Reviews.comment,
+    Reviews.rating
 FROM
     Properties
 LEFT JOIN
