@@ -21,9 +21,7 @@ SELECT
     Properties.description,
     Properties.location,
     Properties.pricepernight,
-    Reviews.property_id AS review_property_id,
     Reviews.comment AS property_review,
-    Reviews.rating AS property_rating
 FROM
     Properties
 LEFT JOIN
