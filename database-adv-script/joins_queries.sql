@@ -29,6 +29,8 @@ FROM
     Properties
 LEFT JOIN
     Reviews ON Properties.property_id = Reviews.property_id;
+ORDER BY
+    Reviews.rating DESC NULLS LAST;
 
 SELECT
     Users.user_id,
