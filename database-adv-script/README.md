@@ -8,3 +8,6 @@
  ### Subqueries
  - a query to find all properties where the average rating is greater than 4.0 using a **`subquery`**.
  - a **`correlated subquery`** to find users who have made more than 3 bookings.
+ ### Aggregations and Window Functions
+ - a query to find the total number of bookings made by each user, using the **`COUNT`** function and **`GROUP BY`** clause.
+ - a window function (**`ROW_NUMBER`**, **`RANK`**) to rank properties based on the total number of bookings they have received.
