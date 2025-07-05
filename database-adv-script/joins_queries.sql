@@ -21,17 +21,12 @@ SELECT
     Properties.description,
     Properties.location,
     Properties.pricepernight,
-    Users.user_id AS host_id,
-    Users.first_name AS host_first_name,
-    Users.last_name AS host_last_name,
     Reviews.review_id,
-    Reviews.user_id AS reviewer_id,
+    Reviews.property_id
     Reviews.comment, AS property_review,
     Reviews.rating AS property_rating
 FROM
     Properties
-LEFT JOIN
-    Users ON Properties.host_id = Users.user_id
 LEFT JOIN
     Reviews ON Properties.property_id = Reviews.property_id
 
