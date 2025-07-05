@@ -1,0 +1,1 @@
+identify and create indexes on Users, Bookings, and Properties tables to improve performance of WHERE, JOIN, and ORDER BY operations.
