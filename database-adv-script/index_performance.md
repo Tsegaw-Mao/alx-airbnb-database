@@ -1,17 +1,14 @@
-# Measure Performance (Before & After)
-## Use **`EXPLAIN`** or **`EXPLAIN ANALYZE`** in PostgreSQL (or **`EXPLAIN`** in MySQL):
+# Index Performance
 
-<pre lang="sql">
-```EXPLAIN ANALYZE
-SELECT
-  Users.name,
-  Properties.name,
-  Bookings.created_at
-FROM
-  Bookings
-JOIN Users ON Users.user_id = Bookings.user_id
-JOIN Properties ON Properties.property_id = Bookings.property_id
-WHERE
-  Properties.location = 'Addis Ababa'
-ORDER BY
-  Bookings.created_at DESC;```</pre>
+## Overview
+Indexes play a critical role in speeding up database queries. This document outlines the indexing strategy, evaluation, and improvements made.
+
+## Strategy
+- **B-tree indexes** on:
+  - Primary keys (e.g., `user_id`, `listing_id`)
+  - Foreign keys (e.g., `user_id` in reviews table)
+  - Filter/search fields (e.g., `city`, `price`, `availability_date`)
+
+- **Composite Indexes** for multi-column WHERE clauses:
+  ```sql
+  CREATE INDEX idx_city_price ON listings (city, price);
