@@ -28,5 +28,5 @@ INSERT INTO Reviews (review_id, property_id, user_id, rating, comment, created_a
 -- Sample data for Messages
 INSERT INTO Messages (message_id, sender_id, recipient_id, message_body, sent_at) VALUES
 ('M-000000-000000-000001', 'U-000001', 'U-000002', 'Hi, is the apartment available for early check-in?', CURRENT_TIMESTAMP),
-('M-000000-000000-000002', 'U-000003', 'U-000004', 'Yes, early check-in is possible.', CURRENT_TIMESTAMP);
+('M-000000-000000-000002', 'U-000003', 'U-000004', 'Yes, early check-in is possible.', CURRENT_TIMESTAMP),
 ('M-000000-000000-000003', 'U-000004', 'U-000003', 'Hi Carol, yes, you can check in from 10am.', CURRENT_TIMESTAMP);
