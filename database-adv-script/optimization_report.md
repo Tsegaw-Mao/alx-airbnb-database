@@ -1,7 +1,4 @@
 
-# **optimization_report.md**
-
-```md
 # Optimization Report
 
 ## Overview
